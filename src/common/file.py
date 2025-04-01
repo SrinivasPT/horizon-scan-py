@@ -9,12 +9,16 @@ def getFileName(key: str) -> str:
     return f"{key}{timestamp}.data"
 
 
-def writeFile(file_path: str, content: Union[str, bytes], mode: str = "w") -> None:
+def writeFile(source: str, content: str, content_type: str = "htm", mode: str = "w", encoding: str = "utf-8") -> None:
+    base_dir = os.path.join("downloads")
+    filename = getFileName(f"{source}_")
+    file_path = os.path.join(base_dir, f"{filename}.{content_type}")
     directory = os.path.dirname(file_path)
+
     if directory and not os.path.exists(directory):
         os.makedirs(directory)
 
-    with open(file_path, mode) as f:
+    with open(file_path, mode, encoding=encoding) as f:
         f.write(content)
 
 

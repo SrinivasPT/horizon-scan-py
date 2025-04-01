@@ -17,3 +17,6 @@ dependencies = [
 [project.scripts]
 run-producer = "scripts.run_producer:main"
 run-consumer = "scripts.run_consumer:main"
+
+[tool.black]
+line-length = 140

@@ -1,11 +1,12 @@
-from typing import TypedDict, Dict
-from langgraph.graph import StateGraph, END
+from typing import Dict, TypedDict
+
+from langgraph.graph import END, StateGraph
+
+from src.agents.classify import classifier
 from src.agents.fetch import fetch_raw_content
 from src.agents.parse import parser_cleaner
 from src.agents.persist import persister
-from src.agents.classify import classifier
 from src.common.config import load_config
-from src.common.db.sqlite import fetch_unprocessed
 
 
 class ConsumerState(TypedDict):

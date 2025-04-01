@@ -1,0 +1,6 @@
+{
+  "oracle": {
+    "server": "localhost:1521/orcl",
+    "port": 1521
+  }
+}

@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "site_pipeline"
+version = "0.1.0"
+description = "A pipeline for downloading and processing site data"
+dependencies = [
+    "playwright==1.44.0",
+    "oracledb==2.2.0",
+    "langgraph==0.0.24",
+    "beautifulsoup4==4.12.2",
+    "feedparser==6.0.10"
+]
+
+[project.scripts]
+run-producer = "scripts.run_producer:main"
+run-consumer = "scripts.run_consumer:main"

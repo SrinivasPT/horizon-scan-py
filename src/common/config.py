@@ -1,23 +1,38 @@
 import json
-from typing import List, Dict, Any
+import logging
+from typing import List
+
+from model.state import ScanConfigItem
 
 
-def load_producer_config(config_file: str) -> Dict[str, Any]:
-    # For this implementation, we'll read app_config.json directly
-    # Later this can be modified to use the config_file parameter if needed
-    with open("config/app_config.json", "r") as f:
-        config_data = json.load(f)
+def load_producer_config(config_file: str) -> List[ScanConfigItem]:
+    try:
+        with open(config_file, "r") as f:
+            config_data = json.load(f)
 
-    # Extract source identifiers and URLs from the configuration
-    source_urls = []
-    for item in config_data:
-        if "url" in item and "source" in item:
-            source_urls.append({"source": item["source"], "url": item["url"]})
+        # Transform the raw config items into ScanConfigItem format
+        scan_config = []
+        for item in config_data:
+            if "source" in item and "url" in item:
+                # Create parser_config with only relevant fields
+                parser_config = {k: item[k] for k in ["parser", "tableSelector"] if k in item}
 
-    return {"source_urls": source_urls}
+                # Handle columns if they exist
+                if "columns" in item:
+                    parser_config["columns"] = item["columns"]
 
+                # Create the config item
+                config_item = {
+                    "source": item["source"],
+                    "title": item.get("title", item["source"]),
+                    "url": item["url"],
+                    "parser_config": parser_config,
+                    "defaults": item.get("defaults", {}),
+                }
+                scan_config.append(config_item)
 
-def load_urls(file_path: str) -> List[str]:
-    with open(file_path, "r") as f:
-        urls = [line.strip() for line in f.readlines() if line.strip()]
-    return urls
+        return scan_config
+
+    except Exception as e:
+        logging.error(f"Error loading configuration: {str(e)}")
+        raise

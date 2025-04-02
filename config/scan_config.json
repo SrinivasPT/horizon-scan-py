@@ -1,0 +1,50 @@
+[
+  {
+    "source": "BIS-PRESS-RELEASES",
+    "title": "BIS BCBS publications",
+    "url": "https://www.bis.org/doclist/all_pressrels.rss",
+    "parser_config": { "parser": "RSS-PARSER" }
+  },
+  {
+    "source": "FDIC-NEWS-FIN-INST-LETTERS",
+    "title": "FDIC News Financial Institution Letters",
+    "url": "https://fdic.gov/news/financial-institution-letters/index.html",
+    "parser_config": {
+      "parser": "HTML-PARSER",
+      "tableSelector": ".views-view-grid .views-row",
+      "columns": [
+        { "name": "publishedOn", "selector": ".views-field-field-date-release" },
+        { "name": "title", "selector": ".views-field-title" },
+        { "name": "summary", "selector": ".views-field-body" },
+        { "name": "linkToRegChangeText", "selector": ".views-field-title", "isLink": true }
+      ]
+    }
+  },
+  {
+    "source": "FDIC-NEWS-PRESS-RELEASES",
+    "title": "FDIC News Press Releases",
+    "url": "https://public.govdelivery.com/topics/USFDIC_26/feed.rss",
+    "parser_config": { "parser": "RSS-PARSER" }
+  },
+  {
+    "source": "FRB-NEWS-PRESS-RELEASES",
+    "title": "Federal Reserve Bank News Press Releases",
+    "url": "https://www.federalreserve.gov/feeds/press_all.xml",
+    "parser_config": { "parser": "RSS-PARSER" }
+  },
+  {
+    "source": "FINCEN-NEWS",
+    "title": "FINCEN News",
+    "url": "https://www.fincen.gov/news-room/news",
+    "parser_config": {
+      "parser": "HTML-PARSER",
+      "tableSelector": ".views-view-grid .views-row",
+      "columns": [
+        { "name": "publishedOn", "selector": ".views-field-field-date-release" },
+        { "name": "title", "selector": ".views-field-title" },
+        { "name": "summary", "selector": ".views-field-body" },
+        { "name": "linkToRegChangeText", "selector": ".views-field-title", "isLink": true }
+      ]
+    }
+  }
+]

@@ -1,22 +1,24 @@
 import asyncio
+
 from playwright.async_api import async_playwright
-from src.common.file import getFileName, writeFile, getFile, deleteFile
+
+from src.common.file import writeFile
 
 
 async def download_agent(state):
-    # Get the URL-source pairs for the current batch
-    all_sources = state["source_urls"]  # This is a list, not a dictionary
+    # Get the scan config items for the current batch
+    all_config_items = state["scan_config"]
     start_idx = state["current_batch"] * state["batch_size"]
-    end_idx = min(start_idx + state["batch_size"], len(all_sources))
+    end_idx = min(start_idx + state["batch_size"], len(all_config_items))
 
-    if start_idx >= len(all_sources):
+    if start_idx >= len(all_config_items):
         return state
 
-    batch_sources = all_sources[start_idx:end_idx]
+    batch_items = all_config_items[start_idx:end_idx]
 
     async with async_playwright() as p:
         browser = await p.chromium.launch(channel="chrome")
-        tasks = [fetch_page(browser, item["source"], item["url"]) for item in batch_sources]
+        tasks = [fetch_page(browser, item["source"], item["url"]) for item in batch_items]
         results = await asyncio.gather(*tasks)
         await browser.close()
 

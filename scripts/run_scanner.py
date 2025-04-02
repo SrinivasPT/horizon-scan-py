@@ -1,18 +1,20 @@
 import asyncio
-from src.pipelines.producer import build_producer_pipeline
+
+from pipelines.pipeline import build_producer_pipeline
 from src.common.config import load_producer_config
 
 
 async def main():
-    config = load_producer_config("config/app_config.json")
+    scan_config = load_producer_config("config/scan_config.json")
     pipeline = build_producer_pipeline()
 
     initial_state = {
-        "source_urls": config["source_urls"],
+        "scan_config": scan_config,
         "batch_size": 2,
         "current_batch": 0,
         "raw_content": {},
     }
+
     await pipeline.ainvoke(initial_state)
 
 

@@ -7,6 +7,7 @@ class Document:
     source: Optional[str] = None
     typeOfChange: Optional[str] = None
     eventType: Optional[str] = None
+    category: Optional[str] = None  # Custom field for categorizing documents
     issuingAuthority: Optional[str] = None
     identifier: Optional[str] = None
     title: Optional[str] = None

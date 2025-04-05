@@ -33,6 +33,7 @@ class RSSParser:
             "description": ["description", "content:encoded"],
             "date": ["pubDate", "dc:date"],
             "link": ["link", "guid"],
+            "category": ["category", "dc:subject"],  # Added XPaths for categories
         }
 
     async def parse(self, content: str, config: Dict, base_url: str) -> List[Document]:
@@ -70,6 +71,7 @@ class RSSParser:
             summary=self._get_description(item),
             publishedOn=self._get_date(item),
             linkToRegChangeText=self._get_link(item),
+            category=self._get_category(item),
         )
 
     def _get_title(self, item: etree._Element, field: str) -> str:
@@ -148,3 +150,29 @@ class RSSParser:
                 continue
 
         return ""
+
+    def _get_category(self, item: etree._Element) -> str:
+        categories = set()  # Using a set to avoid duplicates
+
+        # RSS 2.0: <category>Text</category>
+        try:
+            rss_cats = item.xpath(".//category/text()", namespaces=self.NAMESPACES)
+            categories.update(cat.strip() for cat in rss_cats if cat and cat.strip())
+        except Exception as e:
+            logger.debug(f"Failed to extract RSS categories: {e}")
+
+        # Atom: <category term="Technology"/>
+        try:
+            atom_cats = item.xpath(".//atom:category/@term", namespaces=self.NAMESPACES)
+            categories.update(cat.strip() for cat in atom_cats if cat and cat.strip())
+        except Exception as e:
+            logger.debug(f"Failed to extract Atom categories: {e}")
+
+        # Dublin Core: <dc:subject>Finance</dc:subject>
+        try:
+            dc_cats = item.xpath(".//dc:subject/text()", namespaces=self.NAMESPACES)
+            categories.update(cat.strip() for cat in dc_cats if cat and cat.strip())
+        except Exception as e:
+            logger.debug(f"Failed to extract Dublin Core subjects: {e}")
+
+        return ", ".join(sorted(categories)) if categories else ""

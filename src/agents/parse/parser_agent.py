@@ -1,4 +1,5 @@
 import asyncio
+import json
 import logging
 from typing import Dict, Type
 
@@ -17,31 +18,37 @@ class ParserAgent:
     def __init__(self):
         self.parsers: Dict[str, Type[BaseParser]] = {
             "RSS-PARSER": RSSParser,
-            "HTML-TABLE-PARSER": HTMLParser,
+            "HTML-PARSER": HTMLParser,
         }
 
-    async def parse_content(self, state: State) -> State:
+    async def parse_content(self, state: State) -> Dict:
         documents = []
+
+        if state["scan_config"] and len(state["scan_config"]) > 0:
+            logger.info(f"First item in scan_config: {json.dumps(state['scan_config'][0], indent=2)}")
+
         async with ClientSession() as session:
             tasks = []
-
             for source, (url, content, content_type) in state["raw_content"].items():
-                source_config = next((item for item in self.config_data if item["source"] == source), None)
-                if not source_config:
-                    continue
+                # Find the matching source config
+                source_config = None
+                for item in state["scan_config"]:
+                    if item.get("source") == source:
+                        source_config = item
+                        break
 
-                pipeline = source_config.get("pipeline", [])
-                defaults = source_config.get("defaults", {})
+                parser_type = source_config["parser_config"]["parser"]
+                parser = self.parsers[parser_type]()
 
-                for stage in pipeline:
-                    stage_type = stage["stage"]
-                    if stage_type in self.parsers:
-                        parser = self.parsers[stage_type](defaults, session)
-                        tasks.append(parser.parse(content, stage.get("config", {}), url))
+                tasks.append(parser.parse(content, source_config, url))
 
             results = await asyncio.gather(*tasks, return_exceptions=True)
+
             for result in results:
-                if isinstance(result, list):
+                if isinstance(result, Exception):
+                    logger.error(f"Error during parsing: {result}")
+                elif isinstance(result, list):
                     documents.extend(result)
 
-        return {**state, "documents": [doc.to_dict() for doc in documents]}
+        # Only return the documents instead of the entire state
+        return {"documents": [doc.to_dict() for doc in documents]}

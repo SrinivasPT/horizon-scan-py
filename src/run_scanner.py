@@ -39,7 +39,6 @@ async def main():
         else sum(len(docs) for docs in state["documents"].values())
     )
     logger.info(f"Processed {doc_count} documents")
-    logger.debug(state["documents"])
 
 
 if __name__ == "__main__":

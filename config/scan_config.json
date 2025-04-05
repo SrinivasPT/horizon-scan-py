@@ -1,5 +1,12 @@
 [
   {
+    "source": "BIS-PRESS-RELEASES",
+    "title": "BIS BCBS publications",
+    "url": "https://www.bis.org/doclist/all_pressrels.rss",
+    "parser_config": { "parser": "RSS-PARSER" },
+    "defaults": { "source": "BIS-PRESS-RELEASES" }
+  },
+  {
     "source": "FRB-NEWS-PRESS-RELEASES",
     "title": "Federal Reserve Bank News Press Releases",
     "url": "https://www.federalreserve.gov/feeds/press_all.xml",
@@ -12,12 +19,5 @@
     "url": "https://public.govdelivery.com/topics/USFDIC_26/feed.rss",
     "parser_config": { "parser": "RSS-PARSER" },
     "defaults": { "source": "FDIC-NEWS-PRESS-RELEASES" }
-  },
-  {
-    "source": "BIS-PRESS-RELEASES",
-    "title": "BIS BCBS publications",
-    "url": "https://www.bis.org/doclist/all_pressrels.rss",
-    "parser_config": { "parser": "RSS-PARSER" },
-    "defaults": { "source": "BIS-PRESS-RELEASES" }
   }
 ]

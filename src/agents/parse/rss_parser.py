@@ -11,7 +11,7 @@ from model.document import Document
 logger = get_logger(__name__, "DEBUG")
 
 
-class RSSParser(BaseParser):
+class RSSParserCustom(BaseParser):
     """Simplified RSS parser supporting RDF, RSS, and Atom formats."""
 
     NAMESPACES = {

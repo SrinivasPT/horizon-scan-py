@@ -12,7 +12,7 @@ from model.document import Document
 logger = get_logger(__name__, "DEBUG")
 
 
-class SimpleRssParser(BaseParser):
+class RssParser(BaseParser):
     def __init__(self):
         pass
 

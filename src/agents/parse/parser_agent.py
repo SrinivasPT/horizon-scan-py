@@ -7,8 +7,8 @@ from aiohttp import ClientSession
 from agents.parse.base_parser import BaseParser
 from agents.parse.fed_register_parser import FedRegisterParser
 from agents.parse.html_parser import HTMLParser
-from agents.parse.rss_parser import RSSParser
-from agents.parse.simple_rss_parser import SimpleRssParser
+from agents.parse.rss_parser import RSSParserCustom
+from agents.parse.simple_rss_parser import RssParser
 from model.state import State
 
 logging.basicConfig(level=logging.DEBUG)
@@ -18,9 +18,9 @@ logger = logging.getLogger(__name__)
 class ParserAgent:
     def __init__(self):
         self.parsers: Dict[str, Type[BaseParser]] = {
-            "RSS-PARSER": RSSParser,
+            "RSS-PARSER-CUSTOM": RSSParserCustom,
             "HTML-PARSER": HTMLParser,
-            "SIMPLE-RSS-PARSER": SimpleRssParser,
+            "RSS-PARSER": RssParser,
             "FED-REGISTER-PARSER": FedRegisterParser,
         }
 

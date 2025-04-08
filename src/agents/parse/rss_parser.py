@@ -4,13 +4,14 @@ from typing import Dict, List, Optional
 from bs4 import BeautifulSoup
 from lxml import etree
 
+from agents.parse.base_parser import BaseParser
 from common.logging_config import get_logger
 from model.document import Document
 
 logger = get_logger(__name__, "DEBUG")
 
 
-class RSSParser:
+class RSSParser(BaseParser):
     """Simplified RSS parser supporting RDF, RSS, and Atom formats."""
 
     NAMESPACES = {
@@ -54,9 +55,8 @@ class RSSParser:
     def _extract_items(self, root: etree._Element) -> List[etree._Element]:
         """Extract items with basic format detection."""
         for fmt in self.FEED_FORMATS:
-            if root.tag == fmt["root_tag"]:
-                if items := root.xpath(fmt["item_xpath"], namespaces=self.NAMESPACES):
-                    return items
+            if root.tag == fmt["root_tag"] and (items := root.xpath(fmt["item_xpath"], namespaces=self.NAMESPACES)):
+                return items
 
         if items := root.xpath("//item | //entry"):
             return items
@@ -143,9 +143,8 @@ class RSSParser:
 
         for source in link_sources:
             try:
-                if link := source():
-                    if str(link).strip():
-                        return str(link).strip()
+                if (link := source()) and str(link).strip():
+                    return str(link).strip()
             except Exception:
                 continue
 

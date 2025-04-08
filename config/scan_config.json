@@ -1,18 +1,9 @@
 [
   {
-    "source": "FDIC-NEWS-FIN-INST-LETTERS",
-    "url": "https://fdic.gov/news/financial-institution-letters/index.html",
-    "parser_config": {
-      "parser": "HTML-PARSER",
-      "rowSelector": ".views-element-container .views-row",
-      "headerRowIndex": -1,
-      "columns": [
-        { "name": "publishedOn", "selector": ".news-date" },
-        { "name": "title", "selector": ".news-title" },
-        { "name": "summary", "selector": ".news-content" },
-        { "name": "url", "selector": ".news-title" }
-      ]
-    },
-    "defaults": { "source": "FDIC-NEWS-FIN-INST-LETTERS" }
+    "source": "FEDERAL-REGISTER",
+    "title": "Federal Register",
+    "url": "https://www.federalregister.gov",
+    "parser_config": { "parser": "FED-REGISTER-PARSER" },
+    "defaults": { "source": "FEDERAL-REGISTER" }
   }
 ]

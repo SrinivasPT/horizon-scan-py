@@ -1,6 +1,6 @@
 from langgraph.graph import END, StateGraph
 
-from agents.downloader import download_agent
+from agents.download.downloader import download_agent
 from agents.parse.parser_agent import ParserAgent
 from model.state import State
 
